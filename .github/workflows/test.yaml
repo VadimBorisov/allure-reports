@@ -11,6 +11,4 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           java-version: '17'
-      - name: Make gradlew executable
-      - run: chmod +x ./gradlew
-      - run: ./gradlew clean test
+      - run: chmod +x ./gradlew && ./gradlew clean test
