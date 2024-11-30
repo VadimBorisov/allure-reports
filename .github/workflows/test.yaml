@@ -15,26 +15,25 @@ jobs:
       - uses: Xotabu4/selenoid-github-action@v2
       - run: chmod +x ./gradlew && ./gradlew clean test -Dselenide.remote=http://localhost:4444/wd/hub
 
-      - uses: actions/checkout@v4
-        if: always()
+      - name: Checkout github pages with previous Allure reports
+        uses: actions/checkout@v4
         continue-on-error: true
         with:
           ref: gh-pages
-          path: gh-pages
+          path: gh-pages-dir
 
       - name: Generate Allure test report
         uses: andgineer/allure-report@v3.4
+        id: allure-report
         if: always()
         with:
-          gh-pages: gh-pages
-          allure-results: build/allure-results
-          allure-report: allure-report
-          allure-history: allure-history
+          allure-results: allure-results
+          website: gh-pages-dir
           reports-site-path: builds/tests
 
       - name: Publish Allure test report
         uses: peaceiris/actions-gh-pages@v3
-        if: always()
+        if: ${{ always() && (steps.allure-report.outcome == 'success') }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
