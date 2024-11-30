@@ -1,7 +1,5 @@
 name: Test
 on: workflow_dispatch
-push:
-  branches: '**'
 jobs:
   test:
     #где запускаем
